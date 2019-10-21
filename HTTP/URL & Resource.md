@@ -4,10 +4,10 @@
 
 ### 2-1. 인터넷의 리소스 탐색하기
 
-http://www.joes-hardware.com/seasonal/index-fall.html이라는 URL을 불러온다고 가정해봅시다.
+http://www.joes-hardware.com/seasonal/index-fall.html 이라는 URL을 불러온다고 가정해봅시다.
 
 - URL 첫 부분인 http는 URL의 스킴이다. 스킴은 웹 클라이언트가 리소스에 어떻게 접근하는지 알려줍니다. 이 경우에, URL이 http 프로토콜을 사용합니다.
-- URL의 두 번째 부분 www.joes-hardware.com는 서버의 위치입니다. 이는 웹 클라이언트 리소스가 어디에 호스팅 되어있는지 알려줍니다.
+- URL의 두 번째 부분 www.joes-hardware.com 는 서버의 위치입니다. 이는 웹 클라이언트 리소스가 어디에 호스팅 되어있는지 알려줍니다.
 - URL의 세 번째 부분 /seasonal/index-fall.html은 리소스 경로입니다. 경로는 서버에 존재하는 로컬 리소스 중 요청받은 리소스가 무엇인지 알려줍니다.
 
 대부분의 URL은 동일하게 '스킹://서버위치/경로' 구조로 구성되어 있습니다. 모든 사람이 같은 방식으로 이름을 써서 리소스를 찾을 수 있도록, 단일 방식의 작명 규칙을 가지게 된 것입니다.
@@ -104,7 +104,7 @@ URL은 상대 URL과 절대 URL로 나누어집니다. 절대 URL은 리소스�
 </html>
 ```
 
-위 HTML 문서에서는 `./hammers.html` 을 가리키는 하이퍼링크가 존재합니다. 이 URL은 미완성인 것처럼 보이나, 올바른 상대 URL입니다. 상대 URL에 따르면, HTML 작성자는 URL에 스킴과 호스트 그리고 다른 컴포넌트들을 모두 입력하지 않아도 됩니다. 그 정보는 컴포넌트가 포함된 리서스의 기저 URL에서 알아낼 수 있습니다. 위의 html 문서의 경우 기저 URL은 `http://www.joes-hardware.com/tools.html`입니다. 이 URL을 기저 URL로 사용하여, 상대 URL에서는 기술하지 않은 정보를 추측할 수 있습니다. 필요한 리소스가  `./hammers.html`이고 기저 URL을 활용하면 스킴은 http이고 호스트는 www.joes-hardware.com이란 것을 추측할 수 있습니다.
+위 HTML 문서에서는 `./hammers.html` 을 가리키는 하이퍼링크가 존재합니다. 이 URL은 미완성인 것처럼 보이나, 올바른 상대 URL입니다. 상대 URL에 따르면, HTML 작성자는 URL에 스킴과 호스트 그리고 다른 컴포넌트들을 모두 입력하지 않아도 됩니다. 그 정보는 컴포넌트가 포함된 리서스의 기저 URL에서 알아낼 수 있습니다. 위의 html 문서의 경우 기저 URL은 `http://www.joes-hardware.com/tools.html`입니다. 이 URL을 기저 URL로 사용하여, 상대 URL에서는 기술하지 않은 정보를 추측할 수 있습니다. 필요한 리소스가  `./hammers.html`이고 기저 URL을 활용하면 스킴은 http이고 호스트는 www.joes-hardware.com 이란 것을 추측할 수 있습니다.
 
 상대 URL은 프래그먼트이거나 URL의 일부입니다. URL을 처리하는 브라우저 같은 프로그램은 상대 URL과 절대 URL간에 상호 변환이 가능해야 합니다. 상대 URL을 사용하면 리소스 집합을 쉽게 변경할 수 있습니다.
 

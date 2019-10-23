@@ -177,3 +177,214 @@ Server: Test Server
 ```
 
 여기서 응답 메시지는 여러 줄로 쪼개진 Server 헤더를 포함하고 있습니다. 그 헤더의 완전한 값은 'Test Server Version 1.0'입니다.
+
+### 3-2-4. 엔터티 본문
+
+HTTP 메시지의 세 번째 부분은 선택적인 엔터티 본문입니다. 엔터티 본문은 이미지, 비디오, HTML 문서, 소프트웨어 애플리케이션, 신용카드 트랜잭션 등 여러 종류의 디지털 데이터를 실어나를 수 있습니다. 
+
+### 3-3. 메서드
+
+모든 서버가 모든 메서드를 구현하지는 않습니다. HTTP 버전 1.1과 호환되고자 한다면, 서버는 자신의 리소스에 대해 GET과 HEAD 메서드만을 구현하는 것으로 충분합니다. 서버가 모든 메서드를 구현하지 않았더라도, 메서드는 대부분 제한적으로 사용될 것입니다. 예를 들어, DELETE와 PUT을  지원하는 서버는 아무나 저장된 리소스에 접근하여 삭제할 수 있게 하지는 않을 것입니다. 이 제한은 일반적으로 서버 설정에 의해 정해지고, 따라서 사이트마다 또 서버마다 다룰 수 있습니다.
+
+### 3-3-1. 안전한 메서드(Safe Method)
+
+HTTP는 안전한 메서드라 불리는 메서드의 집합을 정의합니다. GET과 HEAD 메서드는 안전하다고 할 수 있는데, 이는 GET이나 HEAD 메서드를 사용하는 HTTP 요청이 서버에 어떤 영향도 미치지 않음을 의미합니다. 영향을 미치지 않는다는 것은 요청 결과로 인해 서버에서 일어나는 일이 없다는 것을 의미합니다.
+
+안전한 메서드의 목적은, 서버에 어떤 영향을 줄 수 있는 안전하지 않은 메서드가 사용될 때 사용자들에게 그 사실을 알려조는 HTTP 애플리케이션을 만드는 데 있습니다. 예를 들어, 쇼핑몰 사이트에서 웹브라우저는 안전하지 않은 메서드를 담는 요청이 만들어졌고, 그 결과 서버에서 어떤 작용(신용카드가 결제되는 등)이 일어날 수 있음을 알려주는 경고 메시지를 띄울 것 입니다.
+
+### 3-3-2. GET
+
+GET은 가장 흔히 쓰이는 메서드입니다. 주로 서버에게 리소스를 달라고 요청하기 위해 사용됩니다. HTTP/1.1은 서버가 이 메서드를 구현할 것을 요구하고 있습니다.
+
+요청
+
+```http
+GET /seasonal/index-fall.html HTTP/1.1
+Host: www.joes-hardware.com
+Accept: *
+```
+
+응답
+
+```http
+HTTP/1.1 200 OK
+Content-Type: text/html
+Context-Length: 617
+
+<HTML>
+<HEAD>
+.....
+```
+
+### 3-3-3. HEAD
+
+HEAD 메서드는 정확히 GET처럼 동작하지만, 서버는 응답으로 헤더만을 돌려줍니다. 엔터티 본문은 반환되지 않습니다. 이는 클라이언트가 리소스를 가져올 필요 없이 헤다만을 조사할 수 있게 해줍니다. HEAD를 사용하면,
+
+- 리소스를 가져오지 않고도 그에 대해 무엇인가(타입이러거나)를 알아낼 수 있습니다.
+- 응답 상태 코드를 통해, 개체가 존재하는지 알 수 있습니다.
+- 헤더를 확인하여 리소스가 변경되었는지 확인할 수 있습니다.
+
+서버 개발자들은 HEAD 메서드로 얻어지는 헤더가 정확히 GET 메서드로 얻어지는 헤더와 일치함을 보장해야 합니다. 또한 HTTP/1.1 준수를 위해서는 HEAD 메서드가 반드시 구현되어 있어야 합니다.
+
+요청
+
+```http
+HEAD /seasonal/index-fall.html HTTP/1.1
+Host: www.joes-hardware.com
+Accept: *
+```
+
+응답
+
+```http
+HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 617
+```
+
+### 3-3-4. PUT
+
+GET 메서드가 서버로부터 문서를 읽어 들이는 것이면,  PUT 메서드는 서버에 문서를 쓰는 작업을 수행합니다. 사용자가 PUT을 이용해 웹 페이지를 만들고 웹 서버에 직접 게시할 수 있도록 해줍니다.
+
+PUT 메서드의 의미는, 서버가 요청 본문을 가지고 요청 URL 이름대로 새 문서를 만들거나 만약 이미 존재하고 있으면 본문을 사용해서 이를 교체하는 것입니다. PUT은 콘텐츠를 변경할 수 있게 해주기 때문에, 많은 웹 서버가 PUT을 수행하기 전에 사용자에게 비밀번호를 입력해서 로그인할 것을 요구합니다. 
+
+요청
+
+```http
+PUT /product-list.txt HTTP/1.1
+Host: www.joes-hardware.com
+Content-Type: text/plain
+Content-Length: 34
+
+Updated product list coming soon!
+```
+
+응답
+
+```http
+HTTP/1.1 201 Created
+Location: http://www.joes-hardware.com/product-list.txt
+Content-Type: text/plain
+Content-Length: 34
+
+http://www.joes-hardware.com/product-list.txt
+```
+
+### 3-3-5. POST
+
+POST 메서드는 서버에 입력 데이터를 전송하기 위해 고안되었습니다. 실제로 HTML 폼을 지원하기 위해 흔히 사용됩니다. 폼에 담긴 데이터는 서버로 전송되고, 서버는 이를 모아서 필요로 하는 곳에 보냅니다.
+
+요청
+
+```http
+POST /inventory-check.cgi HTTP/1.1
+Host: www.joes-hardware.com
+Content-Type: text/plain
+Content-Length: 18
+
+item=bandsaw 2647
+```
+
+응답
+
+```http
+HTTP/1.1 200 OK
+Content-Type: text/plain
+Content-Length: 18
+
+The bamdsaw model 2647 is in stock!
+```
+
+### 3-3-6. TRACE
+
+클라이언트가 요청을 할 때, 그 요청은 프락시, 방화벽, 게이트 웨이 등등 다양한 애플리케이션을 통과할 수 있습니다. 이 애플리케이션들은 HTTP 요청을 수정할 수 있는 기회가 있습니다. TRACE 메서드는 클라이언트에게 자신의 요청이 서버에 도달했을 때 어떻게 보이는지 알려줍니다.
+
+TRACE 요청은 목적지 서버에서 '루프백' 진단을 시작합니다. 요청 전송 마지막 단계에 있는 서버는 자신이 받은 요청 메시지를 본문에 넣어 TRACE 응답으로 되돌려줍니다. 클라이언트는 자신과 최종 서버 사이에 있는 모든 애플리케이션 요청/응답을 따라가면서 자신이 보낸 요청이 수정되거나 왜곡되었는지 만일 그렇다면 어떻게 변했는지 확인할 수 있습니다. 이렇게 TRACE 메서드는 주로 진단을 위해 사용됩니다.
+
+TRACE는 진단을 위해 사용할 때는 괜찮지만, 그 대신 중간 애플리케이션이 여러 다른 종류의 요청들을 일관되게 다룬다고 가정하는 문제가 있습니다. 많은 애플리케이션은 메서드에 따라 다르게 동작합니다. 예를 들어, 프락시는 POST 요청을 바로 서버로 통과시키는 반면 GET 요청은 웹 캐시와 같은 다흔 HTTP 애플리케이션으로 전송합니다. TRACE는 메서드를 구별하는 메커니즘이 따로 제공하지 않습니다. 어떻게 TRACE 요청을 처리할 지는 일반적으로 중간 애플리케이션이 결정을 내립니다. TRACE 요청에는 어떠한 엔터티 요청도 보낼 수 없습니다. TRACE 응답 엔터티 본문에는 서바가 받은 요청이 그대로 들어있습니다.
+
+클라이언트가 보낸 요청
+
+```http
+TRACE /product-list.txt HTTP/1.1
+Accept: *
+Host: www.joes-hardware.com
+```
+
+프락시가 보낸 요청
+
+```http
+TRACE /product-list.txt HTTP/1.1
+Accept: *
+Host: www.joes-hardware.com
+Via: 1.1 proxy3.company.com
+```
+
+서버가 보낸 응답
+
+```http
+HTTP/1.1 200 OK
+Content-Type: text/plain
+Content-Length: 96
+
+TRACE /product-list.txt HTTP/1.1
+Accept: *
+Host: www.joes-hardware.com
+Via: 1.1 proxy3.company.com
+```
+
+프락시가 보낸 응답
+
+```http
+HTTP/1.1 200 OK
+Content-Type: text/plain
+Content-Length: 96
+Via: 1.1 proxy3.company.com
+
+TRACE /product-list.txt HTTP/1.1
+Accept: *
+Host: www.joes-hardware.com
+Via: 1.1 proxy3.company.com
+```
+
+### 3-3-7. OPTIONS
+
+OPTIONS 메서드는 웹 서버에게 여러 가지 종류의 지원 범위에 대해 물어봅니다. 서버에게 특정 리소스에 대해 어떤 메서드가 지원되는지 물어볼 수 있습니다. (몇몇 서버는 특정 리소스에 대해 특정 동작만을 지원하기 때문입니다.) OPTIONS 메서드는 여러 리소스에 실제로 접근하지 않고도 그것들에 어떻게 접근하는 것이 최선인지 확인할 수 있는 수단을 클라이언트에 제공합니다.
+
+요청
+
+```http
+OPTIONS * HTTP/1.1
+Host: www.joes-hardware.com
+Accept: *
+```
+
+응답
+
+```http
+HTTP/1.1 200 OK
+Allow: GET, POST, PUT, OPTIONS
+Context-Length: 0
+```
+
+### 3-3-8. DELETE
+
+DELETE 메서드는 서버에게 요청 URL로 지정한 리소스를 삭제할 것을 요청합니다. 그러나 클라이언트는 삭제가 수행되는 것을 보장하지 못합니다. 왜냐하면 HTTP 명세는 서버가 클라이언트에게 알리지 않고 요청을 무시하는 것을 허용하기 때문입니다.
+
+요청
+
+```http
+DELETE /product-list.txt HTTP/1.1
+Host: www.joes-hardware.com
+```
+
+응답
+
+```http
+HTTP/1.1 200 OK
+Content-Type: text/plain
+Content-Length: 54
+
+I have your delete request, will take time to process.
+```
+
